@@ -6,5 +6,9 @@
   "nextLoginChangePwd": false,
   "passwordExpired": false,
   "tempPasswordExpired": false,
-  "username": "admin"
+  "username": "admin",
+  "roles": [
+    "PUBLIC",
+    "ADMIN"
+  ]
 }

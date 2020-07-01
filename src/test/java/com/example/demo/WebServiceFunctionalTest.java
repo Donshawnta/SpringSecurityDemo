@@ -75,6 +75,7 @@ public class WebServiceFunctionalTest extends BaseTest {
         assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
     }
 
+
     @Test
     @SneakyThrows
     public void sendUserWithoutUsername() {
@@ -87,6 +88,22 @@ public class WebServiceFunctionalTest extends BaseTest {
         userCreateDTO.setUsername(null);
         ResponseEntity<String> entity = callHttp(token, HttpMethod.POST, "/demo/user", userCreateDTO);
         assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+
+    }
+
+
+    @Test
+    @SneakyThrows
+    public void sendUserWithoutWrongAuthority() {
+        //Query admin token
+        OAuth2AccessToken token = getAccessToken("admin", "admin");
+
+
+        String userStr = LangUtils.loadText(this.getClass(), "createTivadar.json");
+        //Replace PUBLIC authority to unknown one
+        userStr.replace("PUBLIC","XXXX");
+        ResponseEntity<String> entity = callHttp(token, HttpMethod.POST, "/demo/user", userStr);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, entity.getStatusCode());
 
     }
 

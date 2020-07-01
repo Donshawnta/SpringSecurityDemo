@@ -17,7 +17,4 @@ public class UserModifyDTO {
     private Boolean tempPasswordExpired;
     private String userType;
     private String settlementsBySettlementId;
-    private String updated;
-    private Timestamp updatedAt;
-
 }

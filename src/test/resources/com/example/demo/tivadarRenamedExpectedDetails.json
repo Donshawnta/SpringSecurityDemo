@@ -9,5 +9,8 @@
   "phone": "01234",
   "settlementId": "settId",
   "userType": "normal",
-  "username": "tivadar"
+  "username": "tivadar",
+  "roles": [
+    "PUBLIC"
+  ]
 }
