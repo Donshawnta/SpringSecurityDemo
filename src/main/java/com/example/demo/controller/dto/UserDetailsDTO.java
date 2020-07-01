@@ -27,7 +27,6 @@ public class UserDetailsDTO {
     private Boolean passwordExpired;
     private String phone;
     private String settlementId;
-    private String tempPassword;
     private Boolean tempPasswordExpired;
     private String userType;
     private String username;
