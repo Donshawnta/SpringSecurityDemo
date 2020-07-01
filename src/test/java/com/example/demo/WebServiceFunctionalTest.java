@@ -127,6 +127,12 @@ public class WebServiceFunctionalTest extends BaseTest {
         ResponseEntity<String> entitySecond = callHttp(token, HttpMethod.POST, "/demo/user", userCreateDTO);
         assertEquals(HttpStatus.CONFLICT, entitySecond.getStatusCode());
 
+        //Delete user tivadar twice as admin
+        ResponseEntity<String> deleteEntity1 = callHttp(token, HttpMethod.DELETE, "/demo/user/tivadar");
+        assertEquals(HttpStatus.OK, deleteEntity1.getStatusCode());
+        ResponseEntity<String> deleteEntity2 = callHttp(token, HttpMethod.DELETE, "/demo/user/tivadar");
+        assertEquals(HttpStatus.NOT_FOUND, deleteEntity2.getStatusCode());
+
     }
 
     @Test
