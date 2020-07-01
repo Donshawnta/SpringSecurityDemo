@@ -67,6 +67,12 @@ public class WebServiceFunctionalTest extends BaseTest {
         assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
     }
 
+    @Test
+    public void wrongUser() {
+        OAuth2AccessToken token = getAccessToken("xxxxx", "xxxxx");
+        ResponseEntity<String> entity = callGet(token, "/demo/user/admin");
+        assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
+    }
 
     @Test
     public void wrongPassword() {
