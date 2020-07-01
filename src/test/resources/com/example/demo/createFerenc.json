@@ -1,0 +1,16 @@
+{
+  "active": true,
+  "address": "1024 Szava utca 2.",
+  "email": "ferenc@gmail.com",
+  "name": "Szamos Ferenc",
+  "nextLoginChangePwd": true,
+  "phone": "276423",
+  "settlementId": "settId",
+  "password": "demo",
+  "userType": "normal",
+  "username": "ferenc",
+  "settlementsBySettlementId": null,
+  "roles": [
+    "PUBLIC"
+  ]
+}

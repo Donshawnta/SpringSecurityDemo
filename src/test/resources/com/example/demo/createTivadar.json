@@ -1,0 +1,16 @@
+{
+  "active": true,
+  "address": "1024 Szava utca 2.",
+  "email": "tivadar@gmail.com",
+  "name": "Hodos Tivadar",
+  "nextLoginChangePwd": true,
+  "phone": "01234",
+  "settlementId": "settId",
+  "password": "demo",
+  "userType": "normal",
+  "username": "tivadar",
+  "settlementsBySettlementId": null,
+  "roles": [
+    "PUBLIC"
+  ]
+}

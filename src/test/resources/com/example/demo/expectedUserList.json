@@ -1,0 +1,13 @@
+[
+  {
+    "username": "admin",
+    "userType": "admin",
+    "name": "Admin"
+  },
+  {
+    "username": "tivadar",
+    "userType": "normal",
+    "name": "Kelemen Samu",
+    "email": "tivadar@gmail.com"
+  }
+]

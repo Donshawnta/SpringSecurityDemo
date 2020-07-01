@@ -1,0 +1,13 @@
+{
+  "active": true,
+  "address": "1024 Szava utca 2.",
+  "created": "admin",
+  "createdAt": "2020-06-30T08:36:54.136+0000",
+  "email": "tivadar@gmail.com",
+  "name": "Kelemen Samu",
+  "nextLoginChangePwd": true,
+  "phone": "01234",
+  "settlementId": "settId",
+  "userType": "normal",
+  "username": "tivadar"
+}
