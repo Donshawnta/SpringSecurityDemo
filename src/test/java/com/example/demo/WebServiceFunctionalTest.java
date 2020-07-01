@@ -53,7 +53,7 @@ public class WebServiceFunctionalTest extends BaseTest {
     @SneakyThrows
     public void happyCase() {
         OAuth2AccessToken token = getAccessToken("admin", "admin");
-        ResponseEntity<String> entity = callGet(token, "/demo/user/admin");
+        ResponseEntity<String> entity = callHttp(token, "/demo/user/admin");
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         JSONAssert.assertEquals(LangUtils.loadText(this.getClass(), "adminExpectedDetails.json"),
                 entity.getBody(), userDtoComparator);
@@ -63,21 +63,21 @@ public class WebServiceFunctionalTest extends BaseTest {
     @SneakyThrows
     public void getForNonExisting() {
         OAuth2AccessToken token = getAccessToken("admin", "admin");
-        ResponseEntity<String> entity = callGet(token, "/demo/user/xxxx");
+        ResponseEntity<String> entity = callHttp(token, "/demo/user/xxxx");
         assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
     }
 
     @Test
     public void wrongUser() {
         OAuth2AccessToken token = getAccessToken("xxxxx", "xxxxx");
-        ResponseEntity<String> entity = callGet(token, "/demo/user/admin");
+        ResponseEntity<String> entity = callHttp(token, "/demo/user/admin");
         assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
     }
 
     @Test
     public void wrongPassword() {
         OAuth2AccessToken token = getAccessToken("admin", "xxxxx");
-        ResponseEntity<String> entity = callGet(token, "/demo/user/admin");
+        ResponseEntity<String> entity = callHttp(token, "/demo/user/admin");
         assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
     }
 
@@ -107,7 +107,7 @@ public class WebServiceFunctionalTest extends BaseTest {
 
         String userStr = LangUtils.loadText(this.getClass(), "createTivadar.json");
         //Replace PUBLIC authority to unknown one
-        userStr.replace("PUBLIC","XXXX");
+        userStr = userStr.replace("PUBLIC", "XXXX");
         ResponseEntity<String> entity = callHttp(token, HttpMethod.POST, "/demo/user", userStr);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, entity.getStatusCode());
 
@@ -142,7 +142,7 @@ public class WebServiceFunctionalTest extends BaseTest {
         assertEquals(HttpStatus.OK, entity.getStatusCode());
 
         //Query tivadar as admin
-        ResponseEntity<String> tivadarEntity = callGet(adminToken, "/demo/user/tivadar");
+        ResponseEntity<String> tivadarEntity = callHttp(adminToken, "/demo/user/tivadar");
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         JSONAssert.assertEquals(LangUtils.loadText(this.getClass(), "tivadarExpectedDetails.json"),
                 tivadarEntity.getBody(), userDtoComparator);
@@ -154,7 +154,7 @@ public class WebServiceFunctionalTest extends BaseTest {
         userModifyDTO.setName("Kelemen Samu");
         ResponseEntity<String> putEntity = callHttp(adminToken, HttpMethod.PUT, "/demo/user/tivadar", userModifyDTO);
         assertEquals(HttpStatus.OK, putEntity.getStatusCode());
-        tivadarEntity = callGet(adminToken, "/demo/user/tivadar");
+        tivadarEntity = callHttp(adminToken, "/demo/user/tivadar");
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         JSONAssert.assertEquals(LangUtils.loadText(this.getClass(), "tivadarRenamedExpectedDetails.json"),
                 tivadarEntity.getBody(), userDtoComparator);
@@ -169,17 +169,26 @@ public class WebServiceFunctionalTest extends BaseTest {
         assertEquals(HttpStatus.FORBIDDEN, ferencCreateEntity.getStatusCode());
 
         //Query all users as tivadar
-        ResponseEntity<String> allUsersEntity = callGet(tivadarToken, "/demo/user");
+        ResponseEntity<String> allUsersEntity = callHttp(tivadarToken, "/demo/user");
         assertEquals(HttpStatus.OK, allUsersEntity.getStatusCode());
         JSONAssert.assertEquals(LangUtils.loadText(this.getClass(), "expectedUserList.json"),
                 allUsersEntity.getBody(), userDtoComparator);
+
+
+        //Delete tivadar as admin
+        ResponseEntity<String> deletedTivadarEntity = callHttp(adminToken, HttpMethod.DELETE, "/demo/user/tivadar");
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+
+        //Query tivadar as admin
+        tivadarEntity = callHttp(adminToken, "/demo/user/tivadar");
+        assertEquals(HttpStatus.NOT_FOUND, tivadarEntity.getStatusCode());
 
     }
 
 
     @Test
     public void accessWithoutAuth() {
-        ResponseEntity<String> entity = callGet(null, "/demo/user/admin");
+        ResponseEntity<String> entity = callHttp(null, "/demo/user/admin");
         assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
     }
 

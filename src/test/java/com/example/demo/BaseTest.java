@@ -52,24 +52,13 @@ public class BaseTest {
         return accessToken;
     }
 
-    ResponseEntity<String> callGet(OAuth2AccessToken oAuth2AccessToken, String pathStr) {
-
-        String url = "http://localhost:" + port + pathStr;
-
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-
-        if (oAuth2AccessToken != null) {
-            headers.add("Authorization", String.format("%s %s", oAuth2AccessToken.getTokenType(), oAuth2AccessToken.getValue()));
-        }
-
-        RestTemplate restTemplate = new TestRestTemplate().getRestTemplate();
+    ResponseEntity<String> callHttp(OAuth2AccessToken oAuth2AccessToken, String pathStr) {
+        return callHttp(oAuth2AccessToken, HttpMethod.GET, pathStr);
+    }
 
 
-        HttpEntity<String> request = new HttpEntity<String>(headers);
-
-        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-
-        return result;
+    ResponseEntity<String> callHttp(OAuth2AccessToken oAuth2AccessToken, HttpMethod httpMethod, String pathStr) {
+        return callHttp(oAuth2AccessToken, httpMethod, pathStr, null);
     }
 
     ResponseEntity<String> callHttp(OAuth2AccessToken oAuth2AccessToken, HttpMethod httpMethod, String pathStr, Object data) {
@@ -80,15 +69,23 @@ public class BaseTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
 
-        if (StringUtils.hasText(oAuth2AccessToken.getTokenType())) {
+        if (oAuth2AccessToken!=null) {
             headers.add("Authorization", String.format("%s %s", oAuth2AccessToken.getTokenType(), oAuth2AccessToken.getValue()));
         }
 
         RestTemplate restTemplate = new TestRestTemplate().getRestTemplate();
+        HttpEntity httpEntity = null;
 
-        String bodyStr = LangUtils.sneakyThrows(() -> objectMapper.writeValueAsString(data));
+        if (data == null) {
+            httpEntity = new HttpEntity<String>(headers);
+        } else if (data instanceof String) {
+            httpEntity = new HttpEntity<>((String) data, headers);
+        } else {
+            String bodyStr = LangUtils.sneakyThrows(() -> objectMapper.writeValueAsString(data));
+            httpEntity = new HttpEntity<>(bodyStr, headers);
+        }
 
-        return restTemplate.exchange(url, httpMethod, new HttpEntity<>(bodyStr, headers), String.class);
+        return restTemplate.exchange(url, httpMethod, httpEntity, String.class);
     }
 
 
